@@ -81,10 +81,15 @@ public class Quiz implements Gradable {
     
     private QuizResult finalizeQuiz() {
         long durationSeconds = (endTime - startTime) / 1000;
+        
         String status = durationSeconds <= QUIZ_DURATION_SECONDS ? "Completed" : "Time is up.";
-        showResults(durationSeconds, status);
+        QuizResult result =
+                new QuizResult(currentStudent, calculateScore(), durationSeconds, status);
 
-        return new QuizResult(currentStudent, calculateScore(), durationSeconds, status);
+        showResults(durationSeconds, status);
+        CsvResultWriter.writeResult(result);
+
+        return result;
     }
 
     
